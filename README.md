@@ -1,6 +1,6 @@
 # Denjucks
 
-Denjucks is a powerful templating language and framework for Deno applications, and provides and easy syntax for making scalable web applications using Deno.
+Denjucks is a powerful templating language and engine for Deno applications, and provides an easy syntax for making scalable web applications using Deno.
 
 Internally, Denjucks is a fork of Mozilla's Nunjucks for NodeJS, with the following changes:
 
