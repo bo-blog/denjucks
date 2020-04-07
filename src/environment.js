@@ -208,7 +208,7 @@ var Environment = Obj.extend({
             var createTemplate = function(err, info) {
                 if(!info && !err) {
                     if(!ignoreMissing) {
-                        err = new Error('template not found: ' + name);
+                        err = new Error('template not found: ' + name + '\n\u001B[33mnote:\u001B[0m Remember to include the \u001B[32m--allow-read\u001B[0m flag when rendering from files\n');
                     }
                 }
 
