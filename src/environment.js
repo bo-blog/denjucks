@@ -9,7 +9,7 @@ import builtin_filters from './filters.js';
 import builtin_loaders from './loaders.js';
 import runtime from './runtime.js';
 import globals from './globals.js';
-import * as waterfall from 'https://dev.jspm.io/a-sync-waterfall@1.0.1';
+import waterfall from 'https://dev.jspm.io/a-sync-waterfall@1.0.1';
 var Frame = runtime.Frame;
 var Template;
 
