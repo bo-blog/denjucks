@@ -1,6 +1,6 @@
 'use strict';
 
-import * as path from 'https://deno.land/std/path/mod.ts';
+import * as path from './deps/path/std/path/mod.ts';
 import Obj from './object.js';
 import lib from './lib.js';
 

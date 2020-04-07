@@ -1,7 +1,7 @@
 'use strict';
 
-import * as path from 'https://deno.land/std/path/mod.ts';
-import * as asap from 'https://dev.jspm.io/asap@2.0.6';
+import * as path from './deps/path/std/path/mod.ts';
+import * as asap from './deps/asap/asap@2.0.6/asap.js';
 import lib from './lib.js';
 import Obj from './object.js';
 import compiler from './compiler.js';
@@ -9,7 +9,7 @@ import builtin_filters from './filters.js';
 import builtin_loaders from './loaders.js';
 import runtime from './runtime.js';
 import globals from './globals.js';
-import waterfall from 'https://dev.jspm.io/a-sync-waterfall@1.0.1';
+import waterfall from './deps/a-sync-waterfall/a-sync-waterfall@1.0.1/index.js';
 var Frame = runtime.Frame;
 var Template;
 
