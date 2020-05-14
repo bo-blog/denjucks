@@ -1,7 +1,7 @@
 // Copyright 2018-2020 the Deno authors. All rights reserved. MIT license.
 import * as path from "../path/mod.ts";
 import { ensureDir, ensureDirSync } from "./ensure_dir.ts";
-import { getFileInfoType } from "./utils.ts";
+import { getFileInfoType } from "./_util.ts";
 const { lstat, lstatSync, writeFile, writeFileSync } = Deno;
 
 /**
@@ -16,7 +16,7 @@ export async function ensureFile(filePath: string): Promise<void> {
   try {
     // if file exists
     const stat = await lstat(filePath);
-    if (!stat.isFile()) {
+    if (!stat.isFile) {
       throw new Error(
         `Ensure path exists, expected 'file', got '${getFileInfoType(stat)}'`
       );
@@ -47,7 +47,7 @@ export function ensureFileSync(filePath: string): void {
   try {
     // if file exists
     const stat = lstatSync(filePath);
-    if (!stat.isFile()) {
+    if (!stat.isFile) {
       throw new Error(
         `Ensure path exists, expected 'file', got '${getFileInfoType(stat)}'`
       );

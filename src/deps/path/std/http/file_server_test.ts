@@ -1,5 +1,5 @@
 // Copyright 2018-2020 the Deno authors. All rights reserved. MIT license.
-import { assert, assertEquals, assertStrContains } from "../testing/asserts.ts";
+import { assert, assertEquals } from "../testing/asserts.ts";
 import { BufReader } from "../io/bufio.ts";
 import { TextProtoReader } from "../textproto/mod.ts";
 import { ServerRequest } from "./server.ts";
@@ -25,7 +25,7 @@ async function startFileServer(): Promise<void> {
   assert(fileServer.stdout != null);
   const r = new TextProtoReader(new BufReader(fileServer.stdout));
   const s = await r.readLine();
-  assert(s !== Deno.EOF && s.includes("server listening"));
+  assert(s !== null && s.includes("server listening"));
 }
 
 function killFileServer(): void {
@@ -36,7 +36,7 @@ function killFileServer(): void {
 test("file_server serveFile", async (): Promise<void> => {
   await startFileServer();
   try {
-    const res = await fetch("http://localhost:4500/README.md");
+    const res = await fetch("http://localhost:4507/README.md");
     assert(res.headers.has("access-control-allow-origin"));
     assert(res.headers.has("access-control-allow-headers"));
     assertEquals(res.headers.get("content-type"), "text/markdown");
@@ -50,10 +50,10 @@ test("file_server serveFile", async (): Promise<void> => {
   }
 });
 
-test(async function serveDirectory(): Promise<void> {
+test("serveDirectory", async function (): Promise<void> {
   await startFileServer();
   try {
-    const res = await fetch("http://localhost:4500/");
+    const res = await fetch("http://localhost:4507/");
     assert(res.headers.has("access-control-allow-origin"));
     assert(res.headers.has("access-control-allow-headers"));
     const page = await res.text();
@@ -62,9 +62,9 @@ test(async function serveDirectory(): Promise<void> {
     // `Deno.FileInfo` is not completely compatible with Windows yet
     // TODO: `mode` should work correctly in the future.
     // Correct this test case accordingly.
-    Deno.build.os !== "win" &&
+    Deno.build.os !== "windows" &&
       assert(/<td class="mode">(\s)*\([a-zA-Z-]{10}\)(\s)*<\/td>/.test(page));
-    Deno.build.os === "win" &&
+    Deno.build.os === "windows" &&
       assert(/<td class="mode">(\s)*\(unknown mode\)(\s)*<\/td>/.test(page));
     assert(page.includes(`<a href="/README.md">README.md</a>`));
   } finally {
@@ -72,73 +72,54 @@ test(async function serveDirectory(): Promise<void> {
   }
 });
 
-test(async function serveFallback(): Promise<void> {
+test("serveFallback", async function (): Promise<void> {
   await startFileServer();
   try {
-    const res = await fetch("http://localhost:4500/badfile.txt");
+    const res = await fetch("http://localhost:4507/badfile.txt");
     assert(res.headers.has("access-control-allow-origin"));
     assert(res.headers.has("access-control-allow-headers"));
     assertEquals(res.status, 404);
-    res.body.close();
+    const _ = await res.text();
   } finally {
     killFileServer();
   }
 });
 
-test(async function serveWithUnorthodoxFilename(): Promise<void> {
+test("serveWithUnorthodoxFilename", async function (): Promise<void> {
   await startFileServer();
   try {
-    let res = await fetch("http://localhost:4500/http/testdata/%");
+    let res = await fetch("http://localhost:4507/http/testdata/%");
     assert(res.headers.has("access-control-allow-origin"));
     assert(res.headers.has("access-control-allow-headers"));
     assertEquals(res.status, 200);
-    res.body.close();
-    res = await fetch("http://localhost:4500/http/testdata/test%20file.txt");
+    let _ = await res.text();
+    res = await fetch("http://localhost:4507/http/testdata/test%20file.txt");
     assert(res.headers.has("access-control-allow-origin"));
     assert(res.headers.has("access-control-allow-headers"));
     assertEquals(res.status, 200);
-    res.body.close();
+    _ = await res.text();
   } finally {
     killFileServer();
   }
 });
 
-test(async function servePermissionDenied(): Promise<void> {
-  const deniedServer = Deno.run({
-    cmd: [Deno.execPath(), "run", "--allow-net", "http/file_server.ts"],
-    stdout: "piped",
-    stderr: "piped",
-  });
-  assert(deniedServer.stdout != null);
-  const reader = new TextProtoReader(new BufReader(deniedServer.stdout));
-  assert(deniedServer.stderr != null);
-  const errReader = new TextProtoReader(new BufReader(deniedServer.stderr));
-  const s = await reader.readLine();
-  assert(s !== Deno.EOF && s.includes("server listening"));
-
-  try {
-    const res = await fetch("http://localhost:4500/");
-    res.body.close();
-    assertStrContains(
-      (await errReader.readLine()) as string,
-      "run again with the --allow-read flag"
-    );
-  } finally {
-    deniedServer.close();
-    deniedServer.stdout.close();
-    deniedServer.stderr.close();
-  }
-});
-
-test(async function printHelp(): Promise<void> {
+test("printHelp", async function (): Promise<void> {
   const helpProcess = Deno.run({
-    cmd: [Deno.execPath(), "run", "http/file_server.ts", "--help"],
+    cmd: [
+      Deno.execPath(),
+      "run",
+      // TODO(ry) It ought to be possible to get the help output without
+      // --allow-read.
+      "--allow-read",
+      "http/file_server.ts",
+      "--help",
+    ],
     stdout: "piped",
   });
   assert(helpProcess.stdout != null);
   const r = new TextProtoReader(new BufReader(helpProcess.stdout));
   const s = await r.readLine();
-  assert(s !== Deno.EOF && s.includes("Deno File Server"));
+  assert(s !== null && s.includes("Deno File Server"));
   helpProcess.close();
   helpProcess.stdout.close();
 });
