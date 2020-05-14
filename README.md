@@ -28,7 +28,7 @@ When running the file the first time, the source code for denjucks will be downl
 import denjucks from "https://deno.land/x/denjucks/mod.js";
 
 console.log(
-  denjucks.renderString("hello {{ txt }}", {txt: "world"})
+    denjucks.renderString("hello {{ txt }}", {txt: "world"})
 );
 ```
 
@@ -47,10 +47,10 @@ With the file **_base.html** as the parent template:
 
 ```html
 <html>
-  <head></head>
-  <body>
-    {% block content %}{% endblock content %}
-  </body>
+    <head></head>
+    <body>
+        {% block content %}{% endblock content %}
+    </body>
 </html>
 ```
 
@@ -60,7 +60,7 @@ And the file **index.html** as the template that will extend the parent:
 {% extends "_base.html" %}
 
 {% block content %}
-  <p>Hello {{ txt }}</p>
+    <p>Hello {{ txt }}</p>
 {% endblock content %}
 ```
 
@@ -70,7 +70,7 @@ Calling render on **index.html**:
 import denjucks from "https://deno.land/x/denjucks/mod.js";
 
 console.log(
-  denjucks.render("index.html", {txt: "World"})
+    denjucks.render("index.html", {txt: "World"})
 );
 ```
 
@@ -78,10 +78,10 @@ Will print to the console:
 
 ```html
 <html>
-  <head></head>
-  <body>
-    <p>Hello World</p>
-  </body>
+    <head></head>
+    <body>
+        <p>Hello World</p>
+    </body>
 </html>
 ```
 
