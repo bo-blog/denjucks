@@ -1,7 +1,7 @@
 'use strict';
 
 import * as path from './deps/path/std/path/mod.ts';
-import * as asap from './deps/asap/asap@2.0.6/asap.js';
+import {default as asap} from './deps/asap/asap@2.0.6/asap.js';
 import lib from './lib.js';
 import Obj from './object.js';
 import compiler from './compiler.js';
