@@ -114,9 +114,74 @@ exports.isObject = function(obj) {
     return ObjProto.toString.call(obj) === '[object Object]';
 };
 
+/**
+ * @param {string|number} attr
+ * @returns {(string|number)[]}
+ * @private
+ */
+function _prepareAttributeParts(attr) {
+    if (!attr) {
+        return [];
+    }
+
+    if (typeof attr === 'string') {
+        return attr.split('.');
+    }
+
+    return [attr];
+}
+
+/**
+ * @param {string}   attribute      Attribute value. Dots allowed.
+ * @param {function} [postprocess]  Function to postprocess found value
+ * @param {*}        [defaultValue] Value to use if nothing found
+ * @returns {function(Object): *}
+ */
+function getAttrGetter(attribute, postprocess, defaultValue) {
+    const parts = _prepareAttributeParts(attribute);
+
+    return function attrGetter(item) {
+        let _item = item;
+
+        function rollback() {
+            _item = undefined;
+            if (defaultValue) {
+                _item = defaultValue;
+            }
+        }
+
+        for (let i = 0; i < parts.length; i++) {
+            const part = parts[i];
+
+            // If item is not an object, and we still got parts to handle, it means
+            // that something goes wrong. Just roll out to undefined or default value
+            // in that case.
+            try {
+                if (_item.hasOwnProperty(part)) {
+                    _item = _item[part];
+                } else {
+                    rollback();
+
+                    break;
+                }
+            } catch (e) {
+                rollback();
+
+                break;
+            }
+        }
+
+        if (typeof postprocess === 'function') {
+            _item = postprocess(_item);
+        }
+
+        return _item;
+    };
+}
+
 exports.groupBy = function(obj, val) {
     var result = {};
-    var iterator = exports.isFunction(val) ? val : function(obj) { return obj[val]; };
+    var iterator = exports.isFunction(val) ? val : getAttrGetter(val);
     for(var i=0; i<obj.length; i++) {
         var value = obj[i];
         var key = iterator(value, i);
