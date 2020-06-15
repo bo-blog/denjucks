@@ -10,6 +10,25 @@ function normalize(value, defaultValue) {
     return value;
 }
 
+/**
+ * Construct select or reject filter
+ *
+ * @param {boolean} expectedTestResult
+ * @returns {function(array, string, *): array}
+ */
+function getSelectOrReject(expectedTestResult) {
+    function filter(arr, testName = 'truthy', secondArg) {
+        const context = this;
+        const test = context.env.getTest(testName);
+
+        return lib.toArray(arr).filter(function examineTestResult(item) {
+            return test.call(context, item, secondArg) === expectedTestResult;
+        });
+    }
+
+    return filter;
+}
+
 var filters = {
     abs: Math.abs,
 
@@ -240,11 +259,15 @@ var filters = {
         return arr[Math.floor(Math.random() * arr.length)];
     },
 
+    reject: getSelectOrReject(false),
+
     rejectattr: function(arr, attr) {
       return arr.filter(function (item) {
         return !item[attr];
       });
     },
+
+    select: getSelectOrReject(true),
 
     selectattr: function(arr, attr) {
       return arr.filter(function (item) {
