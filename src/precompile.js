@@ -1,6 +1,6 @@
 'use strict';
 
-import * as path from './deps/path/std/path/mod.ts';
+import { path } from './deps.ts';
 import lib from './lib.js';
 import compiler from './compiler.js';
 import Environment__export from './environment.js';

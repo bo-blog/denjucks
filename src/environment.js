@@ -1,6 +1,6 @@
 'use strict';
 
-import * as path from './deps/path/std/path/mod.ts';
+import { path } from './deps.ts';
 import {default as asap} from './deps/asap/asap@2.0.6/asap.js';
 import lib from './lib.js';
 import Obj from './object.js';
@@ -15,7 +15,7 @@ var Template;
 
 // Unconditionally load in this loader, even if no other ones are
 // included (possible in the slim browser build)
-import * as PrecompiledLoader__export from './precompiled-loader.js'; 
+import * as PrecompiledLoader__export from './precompiled-loader.js';
 builtin_loaders.PrecompiledLoader = PrecompiledLoader__export.exports;
 
 // If the user is using the async API, *always* call it
@@ -268,7 +268,7 @@ var Environment = Obj.extend({
                     handle(null, loader.getSource(name));
                 }
             }, createTemplate);
-			
+
             return syncResult;
         }
     },
