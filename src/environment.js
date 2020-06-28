@@ -1,7 +1,8 @@
 'use strict';
 
-import { path } from './deps.ts';
-import {default as asap} from './deps/asap/asap@2.0.6/asap.js';
+import { path } from './deps.js';
+import { asap } from "./deps.js";
+
 import lib from './lib.js';
 import Obj from './object.js';
 import compiler from './compiler.js';

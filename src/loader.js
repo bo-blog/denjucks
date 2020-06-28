@@ -1,6 +1,6 @@
 'use strict';
 
-import { path } from "./deps.ts";
+import { path } from "./deps.js";
 import Obj from './object.js';
 import lib from './lib.js';
 

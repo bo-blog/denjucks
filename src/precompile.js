@@ -1,6 +1,6 @@
 'use strict';
 
-import { path } from './deps.ts';
+import { path } from './deps.js';
 import lib from './lib.js';
 import compiler from './compiler.js';
 import Environment__export from './environment.js';

@@ -1,6 +1,6 @@
 'use strict';
 
-import { path } from './deps.ts';
+import { path } from './deps.js';
 import lib from './lib.js';
 import Loader from './loader.js';
 import PrecompiledLoader from './precompiled-loader.js';
