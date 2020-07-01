@@ -1,6 +1,6 @@
 'use strict';
 
-import * as path from './deps/path/std/path/mod.ts';
+import { path } from './deps.js';
 import lib from './lib.js';
 import Loader from './loader.js';
 import PrecompiledLoader from './precompiled-loader.js';
@@ -59,7 +59,7 @@ var FileSystemLoader = Loader.extend({
         }
 
         this.pathsToNames[fullpath] = name;
-		
+
 		var decoder = new TextDecoder("utf-8");
         return { src: decoder.decode(Deno.readFileSync(fullpath)),
                  path: fullpath,

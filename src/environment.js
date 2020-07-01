@@ -1,7 +1,7 @@
 'use strict';
 
-import * as path from './deps/path/std/path/mod.ts';
-import {default as asap} from './deps/asap/asap@2.0.6/asap.js';
+import { path, asap, waterfall } from './deps.js';
+
 import lib from './lib.js';
 import Obj from './object.js';
 import compiler from './compiler.js';
@@ -9,13 +9,12 @@ import builtin_filters from './filters.js';
 import builtin_loaders from './loaders.js';
 import runtime from './runtime.js';
 import globals from './globals.js';
-import waterfall from './deps/a-sync-waterfall/a-sync-waterfall@1.0.1/index.js';
 var Frame = runtime.Frame;
 var Template;
 
 // Unconditionally load in this loader, even if no other ones are
 // included (possible in the slim browser build)
-import * as PrecompiledLoader__export from './precompiled-loader.js'; 
+import * as PrecompiledLoader__export from './precompiled-loader.js';
 builtin_loaders.PrecompiledLoader = PrecompiledLoader__export.exports;
 
 // If the user is using the async API, *always* call it
@@ -268,7 +267,7 @@ var Environment = Obj.extend({
                     handle(null, loader.getSource(name));
                 }
             }, createTemplate);
-			
+
             return syncResult;
         }
     },
