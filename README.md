@@ -14,6 +14,7 @@ Internally, Denjucks is a fork of Mozilla's Nunjucks for NodeJS, with the follow
 To install, simply import the raw module from the github repository in your Deno code:
 
 ```javascript
+// @deno-types="https://deno.land/x/denjucks/mod.d.ts"
 import denjucks from "https://deno.land/x/denjucks/mod.js";
 ```
 
@@ -25,6 +26,7 @@ When running the file the first time, the source code for denjucks will be downl
 **Rendering a template from a string:**
 
 ```javascript
+// @deno-types="https://deno.land/x/denjucks/mod.d.ts"
 import denjucks from "https://deno.land/x/denjucks/mod.js";
 
 console.log(
@@ -67,6 +69,7 @@ And the file **index.html** as the template that will extend the parent:
 Calling render on **index.html**:
 
 ```javascript
+// @deno-types="https://deno.land/x/denjucks/mod.d.ts"
 import denjucks from "https://deno.land/x/denjucks/mod.js";
 
 console.log(
