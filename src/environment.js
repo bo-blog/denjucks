@@ -1,8 +1,6 @@
 'use strict';
 
-import { path } from './deps.js';
-import { asap } from "./deps.js";
-import { waterfall } from './deps.js';
+import { path, asap, waterfall } from './deps.js';
 
 import lib from './lib.js';
 import Obj from './object.js';
